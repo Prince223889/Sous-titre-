@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Voix Sous-titres</string>
+    <string name="accessibility_description">Lit à voix haute les sous-titres affichés par les applications vidéo. Le texte reste sur votre téléphone.</string>
+</resources>

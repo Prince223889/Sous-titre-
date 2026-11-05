@@ -1,0 +1,44 @@
+name: Construire l'APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14.3'
+
+      - name: Construire
+        run: gradle assembleRelease --no-daemon --stacktrace
+
+      - name: Renommer l'APK
+        run: cp app/build/outputs/apk/release/app-release.apk VoixSousTitres.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: VoixSousTitres-apk
+          path: VoixSousTitres.apk
+
+      - name: Publier dans les Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Voix Sous-titres 1.0.${{ github.run_number }}
+          body: Téléchargez **VoixSousTitres.apk** ci-dessous depuis votre téléphone Android, puis installez-le.
+          files: VoixSousTitres.apk
+          make_latest: true
